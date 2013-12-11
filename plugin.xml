@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="com.wizardlogic.cordova.plugin.ios_keyboard"
+    version="1.0.2">
+
+    <name>iOS Keyboard Plugin</name>
+
+    <description>Better control over the iOS keyboard, iOS7 friendly. Allows for animated shrinking content view.</description>
+
+    <author>Marc H. Weiner (http://linkedin.com/in/mhweiner/)</author>
+
+    <license>MIT</license>
+
+    <engines>
+        <engine name="cordova" version=">=2.9.0" />
+    </engines>
+
+    <js-module src="www/KeyboardPlugin.js" name="KeyboardPlugin">
+        <clobbers target="Keyboard"/>
+    </js-module>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="KeyboardPlugin">
+                <param name="ios-package" value="KeyboardPlugin"/>
+            </feature>
+		</config-file>
+		<header-file src="src/ios/KeyboardPlugin.h" />
+	    <source-file src="src/ios/KeyboardPlugin.m" />
+    </platform>
+
+</plugin>
