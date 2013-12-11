@@ -5,7 +5,7 @@
 
     <name>iOS Keyboard Plugin</name>
 
-    <description>Better control over the iOS keyboard, iOS7 friendly. Allows for animated shrinking content view.</description>
+    <description>Better control over the iOS keyboard behavior, iOS7 friendly. Allows for smoothly animated shrinking content view.</description>
 
     <author>Marc H. Weiner (http://linkedin.com/in/mhweiner/)</author>
 

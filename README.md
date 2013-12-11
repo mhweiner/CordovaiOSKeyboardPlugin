@@ -1,13 +1,15 @@
 # iOS Keyboard Plugin
 
-This plugin allows you to have more control over the behavior and appearance of the iOS keyboard. Other code I have found
-has attempted to do similar things (such as the official PhoneGap plugins), but was buggy on iOS7, or didn't quite
-satisfy different scenarios, such as position:fixed/absolute designs. Some also required that you add
-height: device-height to the viewport, which causes issues with universal iPad apps.
+This plugin allows you to have more control over the behavior of the iOS keyboard, and iOS7 friendly. Allows for
+smoothly animated shrinking of the content view. Other code I have found has attempted to do similar things (such as the
+official Cordova/PhoneGap plugins), but was buggy on iOS7, or didn't satisfy scenarios such as
+position:fixed/absolute layouts. Some also required that you add height: device-height to the viewport, which causes
+issues with universal iPad apps.
 
 Some of the things you can do :
 
-- Have the keyboard overlay your app without pushing it up (and animate in smoothly)
+- Have the keyboard shrink viewport without pushing it up (and animate in smoothly)
+- Have callbacks for native keyboard event notifications (willShow, didShow, willHide, didHide)
 - See if the keyboard is open or not
 - Get the height of the keyboard (to accommodate different languages, etc)
 
@@ -16,33 +18,40 @@ Some of the things you can do :
 Assuming you're running Cordova 2.9+ and using the command line interface, you can install using:
 
     $ cd /path/to/project
-    $ cordova plugin add https://github.com/mhweiner/awesome-ios-keyboard
+    $ cordova plugin add https://github.com/mhweiner/CordovaiOSKeyboardPlugin
     
 # Usage / API
 
 The plugin creates a global variable called `Keyboard` when it is installed.
 
 ```js
-// Have the keyboard overlay the app
-Keyboard.overlayApp(true);
+// Have the keyboard resize the app instead of pushing it up
+Keyboard.resizeApp(true);
 
-// Have the keyboard push up the app (or other default behavior)
+// Have the keyboard push up the app (default behavior)
 Keyboard.overlayApp(false);
 
 // See if keyboard is open or not
 var is_open = Keyboard.isOpen();
 
-// Get height of open keyboard (including inputAccessoryView toolbar, if visible)
+// Get height of open keyboard (including inputAccessoryView toolbar)
 var height = Keyboard.getHeight();
 
-// Set a callback for when the keyboard opens (only supports one at the moment)
-Keyboard.onOpen(myCallbackFunction);
+// The following callbacks only support one at a time, meaning it will
+// replace any previous one that is set.
 
-// Set a callback for when the keyboard closes  (only supports one at the moment)
-Keyboard.onClose(myCallbackFunction);
+// Set callback for keyboardWillShow
+Keyboard.onKeyboardWillShow(myCallbackFunction);
+
+// Set callback for keyboardWillHide
+Keyboard.onKeyboardWillHide(myCallbackFunction);
+
+// Set callback for keyboardDidShow
+Keyboard.onKeyboardDidShow(myCallbackFunction);
+
+// Set callback for keyboardDidHide
+Keyboard.onKeyboardDidHide(myCallbackFunction);
 ```
-
-Please note that if the keyboard is overlaying your app, it's up to you to make sure your fields aren't hidden.
 
 # License
 

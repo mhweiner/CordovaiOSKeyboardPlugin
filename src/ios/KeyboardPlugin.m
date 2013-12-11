@@ -1,3 +1,12 @@
+/**
+ * CordovaiOSKeyboardPlugin
+ * ======================================================
+ * Apache Cordova Plugin for iOS
+ * Written by Marc Weiner (mhweiner234@gmail.com)
+ * https://github.com/mhweiner/CordovaiOSKeyboardPlugin
+ * License: MIT
+ */
+
 #import "KeyboardPlugin.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -7,7 +16,7 @@
 - (void) setup:(CDVInvokedUrlCommand*)command
 {
     //defaults
-    self.overlay_app = YES;
+    self.resize_app = YES;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -16,13 +25,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
 
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 
 }
 
-- (void) overlayApp:(CDVInvokedUrlCommand*)command
+- (void) resizeApp:(CDVInvokedUrlCommand*)command
 {
 
     id value = [command.arguments objectAtIndex:0];
@@ -30,9 +43,9 @@
         value = [NSNumber numberWithBool:YES];
     }
 
-    self.overlay_app = [value boolValue];
+    self.resize_app = [value boolValue];
 
-    NSLog(self.overlay_app ? @"Keyboard will overlay app." : @"Keyboard will have default iOS behavior.");
+    NSLog(self.resize_app ? @"Keyboard will overlay app." : @"Keyboard will have default iOS behavior.");
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
@@ -42,12 +55,12 @@
 
 
     // If default behavior, return
-    if(!self.overlay_app){
+    if(!self.resize_app){
         return;
     }
 
-    // Make the scrollview have negative padding, which helps with viewport
-    // for some reason.
+    // Make the scrollview have negative padding until the keyboard is done animating in.
+    // This helps with the black flicker while the keyboard is animating.
     self.webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, -600, 0);
 
     NSDictionary *userInfo = notif.userInfo;
@@ -82,12 +95,10 @@
 
 
     // Get height of keyboard for JS callback
-
     CGFloat height = keyboardEndFrame.size.height;
 
     // Call JS event handler
-
-    NSString *cmd = [NSString stringWithFormat:@"Keyboard.nativeKeyboardEventHandler(%f);", height];
+    NSString *cmd = [NSString stringWithFormat:@"Keyboard.keyboardWillShow(%f);", height];
     [self.commandDelegate evalJs:cmd];
 
 
@@ -102,10 +113,25 @@
 }
 
 - (void)keyboardWillHide:(NSNotification *)notif {
+    
+    [self.commandDelegate evalJs:@"Keyboard.keyboardWillHide();"];
+    
+}
 
-    //Call JS Event handler
+- (void)keyboardDidShow:(NSNotification *)notif {
+    
+    // Bring the padding back to nomal.
+    self.webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    
+    [self.commandDelegate evalJs:@"Keyboard.keyboardDidShow();"];
+}
 
-    [self.commandDelegate evalJs:@"Keyboard.nativeKeyboardEventHandler();"];
+- (void)keyboardDidHide:(NSNotification *)notif {
+    
+    // Bring the padding back to nomal.
+    self.webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    
+    [self.commandDelegate evalJs:@"Keyboard.keyboardDidHide();"];
 }
 
 @end

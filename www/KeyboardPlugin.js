@@ -1,8 +1,10 @@
 /**
- * iOSKeyboardPlugin
+ * CordovaiOSKeyboardPlugin
  * ======================================================
  * Apache Cordova Plugin for iOS
  * Written by Marc Weiner (mhweiner234@gmail.com)
+ * https://github.com/mhweiner/CordovaiOSKeyboardPlugin
+ * License: MIT
  */
 
 
@@ -14,7 +16,14 @@ var success = function () {
     // do nothing, succeed quietly
 };
 
-var open_callback, close_callback, is_open, keyboard_height;
+var callbacks = {
+    keyboardWillShow: null,
+    keyboardWillHide: null,
+    keyboardDidShow: null,
+    keyboardDidHide: null
+};
+
+var is_open, keyboard_height;
 
 function setup() {
 
@@ -25,7 +34,7 @@ function setup() {
     exec(success, fail, "KeyboardPlugin", "setup", []);
 }
 
-function showToolbar(bool) {
+function resizeApp(bool) {
 
     if(bool === 'undefined' || bool === null){
         bool = true;
@@ -35,44 +44,71 @@ function showToolbar(bool) {
         console.log("Error: " + error);
     };
 
-    exec(success, fail, "KeyboardPlugin", "showToolbar", [bool]);
-}
-
-function overlayApp(bool) {
-
-    if(bool === 'undefined' || bool === null){
-        bool = true;
-    }
-
-    var fail = function (error) {
-        console.log("Error: " + error);
-    };
-
-    exec(success, fail, "KeyboardPlugin", "overlayApp", [bool]);
-}
-
-function onOpen(fn){
-    open_callback = fn;
-}
-
-function onClose(fn){
-    close_callback = fn;
+    exec(success, fail, "KeyboardPlugin", "resizeApp", [bool]);
 }
 
 /**
- * Called by native code
+ * Set callback for UIKeyboardWillShowNotification
+ * @param fn
+ */
+function onKeyboardWillShow(fn){
+    callbacks.keyboardWillShow = fn;
+}
+
+/**
+ * Set callback for UIKeyboardWillHideNotification
+ * @param fn
+ */
+function onKeyboardWillHide(fn){
+    callbacks.keyboardWillHide = fn;
+}
+
+/**
+ * Set callback for UIKeyboardDidShowNotification
+ * @param fn
+ */
+function onKeyboardDidShow(fn){
+    callbacks.keyboardDidShow = fn;
+}
+
+/**
+ * Set callback for UIKeyboardDidHideNotification
+ * @param fn
+ */
+function onKeyboardDidHide(fn){
+    callbacks.keyboardDidHide = fn;
+}
+
+/**
+ * Called by Obj-C code
  * @param height
  */
-function nativeKeyboardEventHandler(height){
-    if(height){
-        keyboard_height = height;
-        is_open = true;
-        if(typeof open_callback == 'function') open_callback();
-    } else {
-        is_open = false;
-        keyboard_height = 0;
-        if(typeof close_callback == 'function') close_callback();
-    }
+function keyboardWillShow(height){
+    keyboard_height = height;
+    if(typeof callbacks.keyboardWillShow == 'function') callbacks.keyboardWillShow();
+}
+
+/**
+ * Called by Obj-C code
+ */
+function keyboardWillHide(){
+    if(typeof callbacks.keyboardWillHide == 'function') callbacks.keyboardWillHide();
+}
+
+/**
+ * Called by Obj-C code
+ */
+function keyboardDidShow(){
+    is_open = true;
+    if(typeof callbacks.keyboardDidShow == 'function') callbacks.keyboardDidShow();
+}
+
+/**
+ * Called by Obj-C code
+ */
+function keyboardDidHide(){
+    is_open = false;
+    if(typeof callbacks.keyboardDidHide == 'function') callbacks.keyboardDidHide();
 }
 
 function isOpen(){
@@ -85,11 +121,15 @@ function getHeight(){
 
 module.exports = {
     setup: setup,
-    showToolbar: showToolbar,
-    overlayApp: overlayApp,
-    onOpen: onOpen,
-    onClose: onClose,
-    nativeKeyboardEventHandler: nativeKeyboardEventHandler,
+    resizeApp: resizeApp,
+    onKeyboardWillShow: onKeyboardWillShow,
+    onKeyboardWillHide: onKeyboardWillHide,
+    onKeyboardDidShow: onKeyboardDidShow,
+    onKeyboardDidHide: onKeyboardDidHide,
+    keyboardWillShow: keyboardWillShow,
+    keyboardWillHide: keyboardWillHide,
+    keyboardDidShow: keyboardDidShow,
+    keyboardDidHide: keyboardDidHide,
     isOpen: isOpen,
     getHeight: getHeight
 };
