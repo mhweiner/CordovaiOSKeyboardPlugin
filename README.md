@@ -75,6 +75,11 @@ $('body').on('keyboardDidShow', function(){
 
 ```
 
+# Notes
+
+* At the time of this writing there is no Apple documented way to remove the Previous, Next, and
+Done buttons.
+
 # License
 
 The MIT License
