@@ -32,7 +32,7 @@ The plugin creates a global variable called `Keyboard` when it is installed.
 Keyboard.resizeApp(true);
 
 // Have the keyboard push up the app (default behavior)
-Keyboard.overlayApp(false);
+Keyboard.resizeApp(false);
 
 // See if keyboard is open or not
 var is_open = Keyboard.isOpen();
