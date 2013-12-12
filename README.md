@@ -1,15 +1,15 @@
 # iOS Keyboard Plugin
 
-This plugin allows you to have more control over the behavior of the iOS keyboard, and iOS7 friendly. Allows for
-smoothly animated shrinking of the content view. Other code I have found has attempted to do similar things (such as the
-official Cordova/PhoneGap plugins), but was buggy on iOS7, or didn't satisfy scenarios such as
-position:fixed/absolute layouts. Some also required that you add height: device-height to the viewport, which causes
-issues with universal iPad apps.
+This plugin allows you to have more control over the behavior of the iOS keyboard and subscribe to native UIKeyboard
+events via jQuery. Allows for smoothly animated shrinking of the content view. While other plugins attempt to
+do similar things (such as the official Cordova/PhoneGap plugins), they were glitchy on iOS7 (in my experience), or didn't
+satisfy position:fixed/absolute layouts. Some also required that you add height: device-height to the viewport, which
+causes issues with universal iPad apps.
 
 Some of the things you can do :
 
 - Have the keyboard shrink viewport without pushing it up (and animate in smoothly)
-- Have callbacks for native UIKeyboard event notifications (willShow, didShow, willHide, didHide)
+- Subscribe to jQuery events for native UIKeyboard event notifications (willShow, didShow, willHide, didHide)
 - See if the keyboard is open or not
 - Get the height of the keyboard (to accommodate different languages, etc)
 
