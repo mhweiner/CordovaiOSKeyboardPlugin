@@ -16,7 +16,7 @@
 - (void) setup:(CDVInvokedUrlCommand*)command
 {
     //defaults
-    self.resize_app = YES;
+    self.resize_app = NO;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -45,7 +45,7 @@
 
     self.resize_app = [value boolValue];
 
-    NSLog(self.resize_app ? @"Keyboard will overlay app." : @"Keyboard will have default iOS behavior.");
+    NSLog(self.resize_app ? @"Keyboard will resize app." : @"Keyboard will have default behavior.");
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
