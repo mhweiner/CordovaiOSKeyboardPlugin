@@ -9,7 +9,7 @@ issues with universal iPad apps.
 Some of the things you can do :
 
 - Have the keyboard shrink viewport without pushing it up (and animate in smoothly)
-- Have callbacks for native keyboard event notifications (willShow, didShow, willHide, didHide)
+- Have callbacks for native UIKeyboard event notifications (willShow, didShow, willHide, didHide)
 - See if the keyboard is open or not
 - Get the height of the keyboard (to accommodate different languages, etc)
 
@@ -19,6 +19,9 @@ Assuming you're running Cordova 2.9+ and using the command line interface, you c
 
     $ cd /path/to/project
     $ cordova plugin add https://github.com/mhweiner/CordovaiOSKeyboardPlugin
+
+Note: At this time, jQuery is required for event handling. Feel free to replace the jQuery code with vanilla
+javascript (or submit a pull request).
     
 # Usage / API
 
@@ -37,20 +40,39 @@ var is_open = Keyboard.isOpen();
 // Get height of open keyboard (including inputAccessoryView toolbar)
 var height = Keyboard.getHeight();
 
-// The following callbacks only support one at a time, meaning it will
-// replace any previous one that is set.
+// The following jQuery events are available:
+// keyboardWillShow, keyboardDidShow, keyboardWillHide, keyboardDidHide
 
-// Set callback for keyboardWillShow
-Keyboard.onKeyboardWillShow(myCallbackFunction);
+// Set callback
+$('body').on('keyboardWillShow', myCallback);
 
-// Set callback for keyboardWillHide
-Keyboard.onKeyboardWillHide(myCallbackFunction);
+// Remove callback
+$('body').off('keyboardWillShow')
 
-// Set callback for keyboardDidShow
-Keyboard.onKeyboardDidShow(myCallbackFunction);
+```
 
-// Set callback for keyboardDidHide
-Keyboard.onKeyboardDidHide(myCallbackFunction);
+# Advanced Usage
+
+From the time between keyboardWillShow to keyboardDidShow events, the viewport will be an extra 600 pixels taller to
+make the animation smoother. So, if you're animating something using CSS bottom property, you must add an extra 600
+pixels. Example:
+
+```js
+
+// Animate element up while keyboard is animating.
+Keyboard.onKeyboardWillShow(function(){
+    $('#bottomElement').animate({
+        bottom: Keyboard.getHeight() + 600 //extra 600 pixels
+    }, {
+        duration: 300
+    });
+});
+
+// Position back to 0 after keyboard is done animating.
+Keyboard.onKeyboardDidShow(function(){
+    $('#bottomElement').css({bottom:0});
+});
+
 ```
 
 # License
