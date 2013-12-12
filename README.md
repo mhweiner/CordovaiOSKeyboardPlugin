@@ -60,7 +60,7 @@ pixels. Example:
 ```js
 
 // Animate element up while keyboard is animating.
-Keyboard.onKeyboardWillShow(function(){
+$('body').on('keyboardWillShow', function(){
     $('#bottomElement').animate({
         bottom: Keyboard.getHeight() + 600 //extra 600 pixels
     }, {
@@ -69,7 +69,7 @@ Keyboard.onKeyboardWillShow(function(){
 });
 
 // Position back to 0 after keyboard is done animating.
-Keyboard.onKeyboardDidShow(function(){
+$('body').on('keyboardDidShow', function(){
     $('#bottomElement').css({bottom:0});
 });
 
