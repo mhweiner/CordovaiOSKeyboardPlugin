@@ -16,7 +16,8 @@ var success = function () {
     // do nothing, succeed quietly
 };
 
-var is_open, keyboard_height;
+var is_open = false;
+var keyboard_height = 0;
 
 function setup() {
 
