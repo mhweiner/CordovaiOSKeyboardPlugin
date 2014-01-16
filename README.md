@@ -1,15 +1,14 @@
 # iOS Keyboard Plugin
 
-This plugin allows you to have more control over the behavior of the iOS keyboard and subscribe to native UIKeyboard
-events via jQuery. Allows for smoothly animated shrinking of the content view. While other plugins attempt to
-do similar things (such as the official Cordova/PhoneGap plugins), they were glitchy on iOS7 (in my experience), or didn't
-satisfy position:fixed/absolute layouts. Some also required that you add height: device-height to the viewport, which
-causes issues with universal iPad apps.
+This plugin allows you to have better control over the behavior of the iOS keyboard and subscribe to native UIKeyboard
+events via jQuery. Allows for smoothly animated shrinking of the content view, solving the issue of the white/black box
+while the keyboard animates up. Supports `position:absolute`, or 100% height layouts. Does not require that you add
+`height: device-height` to the viewport, which causes issues with universal iPad apps. 100% Apple kosher.
 
 Some of the things you can do :
 
 - Have the keyboard shrink viewport without pushing it up (and animate in smoothly)
-- Subscribe to jQuery events for native UIKeyboard event notifications (willShow, didShow, willHide, didHide)
+- Subscribe to jQuery events for native keyboard event notifications (willShow, didShow, willHide, didHide)
 - See if the keyboard is open or not
 - Get the height of the keyboard (to accommodate different languages, etc)
 
@@ -51,9 +50,17 @@ $('body').off('keyboardWillShow')
 
 ```
 
-# Advanced Usage
+# Troubleshooting & Tips
 
-From the time between keyboardWillShow to keyboardDidShow events, the viewport will be an extra 600 pixels taller to
+* If you are experiencing issues where the screen bounces, try adding `<preference name="DisallowOverscroll" value="true" />`
+in your config.xml file. This is especially appropriate for apps contained in a 100% height div like iScroll.
+
+* Other keyboard plugins could interfere with this plugin. If you're having issues, try disabling them.
+
+* If you're using PhoneGap/Cordova prior to 3.2, you will probably want to comment out the code in the keyboardWillShow
+and keyboardWillHide functions. This was moved to the plugin `org.apache.cordova.keyboard` in 3.2
+
+* From the time between keyboardWillShow to keyboardDidShow events, the viewport will be an extra 600 pixels taller to
 make the animation smoother. So, if you're animating something using CSS bottom property, you must add an extra 600
 pixels. Example:
 
@@ -75,10 +82,8 @@ $('body').on('keyboardDidShow', function(){
 
 ```
 
-# Notes
-
-* At the time of this writing there is no Apple documented way to remove the Previous, Next, and
-Done buttons.
+* If you wish to remove the Previous, Next and Done buttons, there is another plugin available for that. Currently,
+there is no documented way to do this.
 
 # License
 

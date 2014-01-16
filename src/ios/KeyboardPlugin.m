@@ -29,6 +29,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidShow:)
                                                  name:UIKeyboardDidShowNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
 
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -113,7 +117,13 @@
 }
 
 - (void)keyboardWillHide:(NSNotification *)notif {
-    
+    // Bring the padding back to nomal.
+    self.webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    CGRect keyboardFrame = [notif.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardFrame = [self.viewController.view convertRect:keyboardFrame fromView:nil];
+    CGRect newFrame = self.viewController.view.bounds;
+    self.webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.webView.frame = newFrame;
     [self.commandDelegate evalJs:@"Keyboard.keyboardWillHide();"];
     
 }
@@ -127,12 +137,8 @@
 }
 
 - (void)keyboardDidHide:(NSNotification *)notif {
-    
-    // Bring the padding back to nomal.
-    self.webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    
+
     [self.commandDelegate evalJs:@"Keyboard.keyboardDidHide();"];
 }
 
 @end
-
