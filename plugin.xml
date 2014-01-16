@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     id="com.wizardlogic.cordova.plugin.ios_keyboard"
-    version="1.0.2">
+    version="2.0.0">
 
     <name>iOS Keyboard Plugin</name>
 
-    <description>Better control over the iOS keyboard behavior, iOS7 friendly. Allows for smoothly animated shrinking content view.</description>
+    <description>Control iOS keyboard behavior, event callbacks, and more.</description>
 
     <author>Marc H. Weiner (http://linkedin.com/in/mhweiner/)</author>
 
