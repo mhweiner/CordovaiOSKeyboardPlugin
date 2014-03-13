@@ -19,15 +19,6 @@ var success = function () {
 var is_open = false;
 var keyboard_height = 0;
 
-function pluginInitialize() {
-
-    var fail = function (error) {
-        console.log("Error setting up KeyboardPlugin: " + error);
-    };
-
-    exec(success, fail, "KeyboardPlugin", "setup", []);
-}
-
 /**
  * Called by Obj-C code
  * @param height
@@ -78,7 +69,6 @@ function getHeight(){
 }
 
 module.exports = {
-    pluginInitialize: pluginInitialize,
     keyboardWillShow: keyboardWillShow,
     keyboardWillHide: keyboardWillHide,
     keyboardDidShow: keyboardDidShow,

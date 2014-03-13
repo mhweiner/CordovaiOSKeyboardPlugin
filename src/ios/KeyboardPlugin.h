@@ -10,5 +10,5 @@
 #import <Cordova/CDVPlugin.h>
 
 @interface KeyboardPlugin : CDVPlugin
-- (void) setup:(CDVInvokedUrlCommand*)command;
+- (void) pluginInitialize:(CDVInvokedUrlCommand*)command;
 @end

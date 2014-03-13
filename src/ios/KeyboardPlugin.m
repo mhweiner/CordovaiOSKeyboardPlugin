@@ -13,7 +13,7 @@
 @implementation KeyboardPlugin
 
 
-- (void) setup:(CDVInvokedUrlCommand*)command
+- (void) pluginInitialize:(CDVInvokedUrlCommand*)command
 {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
