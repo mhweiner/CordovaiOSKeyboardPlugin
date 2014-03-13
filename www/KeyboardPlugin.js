@@ -19,7 +19,7 @@ var success = function () {
 var is_open = false;
 var keyboard_height = 0;
 
-function setup() {
+function pluginInitialize() {
 
     var fail = function (error) {
         console.log("Error setting up KeyboardPlugin: " + error);
@@ -28,26 +28,15 @@ function setup() {
     exec(success, fail, "KeyboardPlugin", "setup", []);
 }
 
-function resizeApp(bool) {
-
-    if(bool === 'undefined' || bool === null){
-        bool = true;
-    }
-
-    var fail = function (error) {
-        console.log("Error: " + error);
-    };
-
-    exec(success, fail, "KeyboardPlugin", "resizeApp", [bool]);
-}
-
 /**
  * Called by Obj-C code
  * @param height
  */
 function keyboardWillShow(height){
     keyboard_height = height;
-    $('body').trigger('keyboardWillShow');
+    var elem = document.getElementByTagName('body');
+    var event = new Event('keyboardWillShow');
+    elem.dispatchEvent(event);
 }
 
 /**
@@ -55,6 +44,9 @@ function keyboardWillShow(height){
  */
 function keyboardWillHide(){
     $('body').trigger('keyboardWillHide');
+    var elem = document.getElementByTagName('body');
+    var event = new Event('keyboardWillHide');
+    elem.dispatchEvent(event);
 }
 
 /**
@@ -62,7 +54,9 @@ function keyboardWillHide(){
  */
 function keyboardDidShow(){
     is_open = true;
-    $('body').trigger('keyboardDidShow');
+    var elem = document.getElementByTagName('body');
+    var event = new Event('keyboardDidShow');
+    elem.dispatchEvent(event);
 }
 
 /**
@@ -70,7 +64,9 @@ function keyboardDidShow(){
  */
 function keyboardDidHide(){
     is_open = false;
-    $('body').trigger('keyboardDidHide');
+    var elem = document.getElementByTagName('body');
+    var event = new Event('keyboardDidHide');
+    elem.dispatchEvent(event);
 }
 
 function isOpen(){
@@ -82,7 +78,7 @@ function getHeight(){
 }
 
 module.exports = {
-    setup: setup,
+    pluginInitialize: pluginInitialize,
     resizeApp: resizeApp,
     keyboardWillShow: keyboardWillShow,
     keyboardWillHide: keyboardWillHide,

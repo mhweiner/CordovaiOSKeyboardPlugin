@@ -11,6 +11,4 @@
 
 @interface KeyboardPlugin : CDVPlugin
 - (void) setup:(CDVInvokedUrlCommand*)command;
-- (void) resizeApp:(CDVInvokedUrlCommand*)command;
-@property (nonatomic, assign) BOOL resize_app;
 @end
