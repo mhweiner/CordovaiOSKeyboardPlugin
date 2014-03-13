@@ -1,16 +1,25 @@
 # iOS Keyboard Plugin
 
-This plugin allows you to have better control over the behavior of the iOS keyboard and subscribe to native UIKeyboard
-events via jQuery. Allows for smoothly animated shrinking of the content view, solving the issue of the white/black box
-while the keyboard animates up. Supports `position:absolute`, or 100% height layouts. Does not require that you add
-`height: device-height` to the viewport, which causes issues with universal iPad apps. 100% Apple kosher.
+This plugin allows you to subscribe to native UIKeyboard events via jQuery.
 
 Some of the things you can do :
 
-- Have the keyboard shrink viewport without pushing it up (and animate in smoothly)
 - Subscribe to jQuery events for native keyboard event notifications (willShow, didShow, willHide, didHide)
 - See if the keyboard is open or not
 - Get the height of the keyboard (to accommodate different languages, etc)
+
+# What's changed recently
+
+3/13/14
+
+- I had to remove the ability for the app to prevent the keyboard from pushing up the app. iOS7.1 broke it, and it
+was an unmaintainable hack. There is no documented way to change the keyboard behavoir or appearance in a UIWebView,
+with a few exceptions. See: https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWebView_Class/Reference/Reference.html and
+and https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html.
+
+- Plugin no longer requires jQuery
+
+- Plugin auto-instantiates and should work on all versions of Cordova 2.9+.
 
 # Installation
 
@@ -18,20 +27,12 @@ Assuming you're running Cordova 2.9+ and using the command line interface, you c
 
     $ cd /path/to/project
     $ cordova plugin add https://github.com/mhweiner/CordovaiOSKeyboardPlugin
-
-Note: At this time, jQuery is required for event handling. Feel free to replace the jQuery code with vanilla
-javascript (or submit a pull request).
     
 # Usage / API
 
 The plugin creates a global variable called `Keyboard` when it is installed.
 
 ```js
-// Have the keyboard resize the app instead of pushing it up
-Keyboard.resizeApp(true);
-
-// Have the keyboard push up the app (default behavior)
-Keyboard.resizeApp(false);
 
 // See if keyboard is open or not
 var is_open = Keyboard.isOpen();
@@ -46,44 +47,18 @@ var height = Keyboard.getHeight();
 $('body').on('keyboardWillShow', myCallback);
 
 // Remove callback
-$('body').off('keyboardWillShow')
+$('body').off('keyboardWillShow');
+
+Note: jQuery is not required. It's just used here as an example.
 
 ```
 
 # Troubleshooting & Tips
 
-* If you are experiencing issues where the screen bounces, try adding `<preference name="DisallowOverscroll" value="true" />`
-in your config.xml file. This is especially appropriate for apps contained in a 100% height div like iScroll.
-
 * Other keyboard plugins could interfere with this plugin. If you're having issues, try disabling them.
 
 * If you're using PhoneGap/Cordova prior to 3.2, you will probably want to comment out the code in the keyboardWillShow
-and keyboardWillHide functions. This was moved to the plugin `org.apache.cordova.keyboard` in 3.2
-
-* From the time between keyboardWillShow to keyboardDidShow events, the viewport will be an extra 600 pixels taller to
-make the animation smoother. So, if you're animating something using CSS bottom property, you must add an extra 600
-pixels. Example:
-
-```js
-
-// Animate element up while keyboard is animating.
-$('body').on('keyboardWillShow', function(){
-    $('#bottomElement').animate({
-        bottom: Keyboard.getHeight() + 600 //extra 600 pixels
-    }, {
-        duration: 300
-    });
-});
-
-// Position back to 0 after keyboard is done animating.
-$('body').on('keyboardDidShow', function(){
-    $('#bottomElement').css({bottom:0});
-});
-
-```
-
-* If you wish to remove the Previous, Next and Done buttons, there is another plugin available for that. Currently,
-there is no documented way to do this.
+and keyboardWillHide functions. This was moved to the plugin `org.apache.cordova.keyboard` in 3.2.
 
 # License
 
