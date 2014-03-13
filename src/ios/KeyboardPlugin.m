@@ -13,7 +13,7 @@
 @implementation KeyboardPlugin
 
 
-- (void) pluginInitialize:(CDVInvokedUrlCommand*)command
+- (void) pluginInitialize
 {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
@@ -31,10 +31,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:)
                                                  name:UIKeyboardDidHideNotification
                                                object:nil];
-
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-
+    
     NSLog(@"Keyboard plugin initialized.");
 
 }

@@ -25,9 +25,8 @@ var keyboard_height = 0;
  */
 function keyboardWillShow(height){
     keyboard_height = height;
-    var elem = document.getElementByTagName('body');
     var event = new Event('keyboardWillShow');
-    elem.dispatchEvent(event);
+    document.body.dispatchEvent(event);
 }
 
 /**
@@ -35,9 +34,8 @@ function keyboardWillShow(height){
  */
 function keyboardWillHide(){
     $('body').trigger('keyboardWillHide');
-    var elem = document.getElementByTagName('body');
     var event = new Event('keyboardWillHide');
-    elem.dispatchEvent(event);
+    document.body.dispatchEvent(event);
 }
 
 /**
@@ -45,9 +43,8 @@ function keyboardWillHide(){
  */
 function keyboardDidShow(){
     is_open = true;
-    var elem = document.getElementByTagName('body');
     var event = new Event('keyboardDidShow');
-    elem.dispatchEvent(event);
+    document.body.dispatchEvent(event);
 }
 
 /**
@@ -55,9 +52,8 @@ function keyboardDidShow(){
  */
 function keyboardDidHide(){
     is_open = false;
-    var elem = document.getElementByTagName('body');
     var event = new Event('keyboardDidHide');
-    elem.dispatchEvent(event);
+    document.body.dispatchEvent(event);
 }
 
 function isOpen(){
