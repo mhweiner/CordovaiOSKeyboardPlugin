@@ -49,9 +49,9 @@ $('body').on('keyboardWillShow', myCallback);
 // Remove callback
 $('body').off('keyboardWillShow');
 
-Note: jQuery is not required. It's just used here as an example.
-
 ```
+
+Note: jQuery is not required. It's just used here as an example.
 
 # Troubleshooting & Tips
 
