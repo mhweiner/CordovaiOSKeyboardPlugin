@@ -79,7 +79,6 @@ function getHeight(){
 
 module.exports = {
     pluginInitialize: pluginInitialize,
-    resizeApp: resizeApp,
     keyboardWillShow: keyboardWillShow,
     keyboardWillHide: keyboardWillHide,
     keyboardDidShow: keyboardDidShow,
